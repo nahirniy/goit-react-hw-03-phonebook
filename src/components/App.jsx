@@ -5,11 +5,23 @@ import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
 import { nanoid } from 'nanoid';
 
+const LOCALSTORAGE_KEY = 'conctacts';
+
 class App extends Component {
   state = {
     contacts: [],
     filter: '',
   };
+
+  componentDidMount() {
+    this.setState({ contacts: JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY)) ?? [] });
+  }
+
+  componentDidUpdate(_, prevState) {
+    if (prevState.contacts.length !== this.state.contacts.length) {
+      localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(this.state.contacts));
+    }
+  }
 
   addContact = newContact => {
     const { contacts } = this.state;
